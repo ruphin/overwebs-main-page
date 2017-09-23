@@ -18,13 +18,14 @@
   },
   "dependencies": {
     "gluonjs": "^2.0.0-preview.4",
-    "overwebs-player-widget": "^0.0.2",
+    "overwebs-main-menu": "^0.0.2",
     "overwebs-player-data": "^0.0.1",
-    "overwebs-main-menu": "^0.0.2"
+    "overwebs-player-widget": "^0.0.2"
   },
   "scripts": {
     "build": "gulp",
     "dev": "gulp serve",
     "publish": "git add overwebs-main-page.js"
-  }
+  },
+  "version": "0.0.1"
 }
