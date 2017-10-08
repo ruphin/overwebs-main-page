@@ -4,7 +4,7 @@ import{GluonElement,html}from'../gluonjs/gluon.js';import'../overwebs-player-wid
         display: block;
         position: relative;
         overflow: auto;
-        width: 100vw;
+        width: 100%;
         min-height: 100vh;
         padding-top: 12vw;
       }
@@ -106,4 +106,4 @@ import{GluonElement,html}from'../gluonjs/gluon.js';import'../overwebs-player-wid
       <div class="unlocks"><span class="unlocked">${this._unlocked}</span>/${this._unlockable} unlocks</div>
       <div class="unlocksShadow">${this._unlocked}/${this._unlockable} unlocks</div>
     </div>
-    `}constructor(){super(),this._hero='',this._unlocked=0,this._unlockable=0}connectedCallback(){super.connectedCallback(),this.$.heroData.addEventListener('data-changed',()=>{this.heroData=this.$.heroData.data,_heroChanged()}),this.$.playerData.addEventListener('player-changed',()=>{console.log('EVENT!'),this.$.playerWidget.player=this.$.playerData.player})}static get observers(){return['_heroChanged(heroData, playerData, backgroundSelection)']}_heroChanged(){if(void 0!==this.heroData&&void 0!==this.playerData&&void 0!==this.backgroundSelection){let a=this.backgroundSelection.split('/').slice(0,-1).pop();this._hero=this.heroData[a]&&this.heroData[a].name||'',this._unlocked=this.playerData.unlocks&&this.heroData[a]?Math.min(this.playerData.unlocks[a],this.heroData[a].unlockable):0,this._unlockable=this.heroData[a]&&this.heroData[a].unlockable||0,this.render()}}}customElements.define(OverwebsMainPage.is,OverwebsMainPage);
+    `}constructor(){super(),this._hero='',this._unlocked=0,this._unlockable=0}connectedCallback(){super.connectedCallback(),this.$.heroData.addEventListener('data-changed',()=>{this.heroData=this.$.heroData.data,_heroChanged()}),this.$.playerData.addEventListener('player-changed',()=>{this.$.playerWidget.player=this.$.playerData.player})}static get observers(){return['_heroChanged(heroData, playerData, backgroundSelection)']}_heroChanged(){if(void 0!==this.heroData&&void 0!==this.playerData&&void 0!==this.backgroundSelection){let a=this.backgroundSelection.split('/').slice(0,-1).pop();this._hero=this.heroData[a]&&this.heroData[a].name||'',this._unlocked=this.playerData.unlocks&&this.heroData[a]?Math.min(this.playerData.unlocks[a],this.heroData[a].unlockable):0,this._unlockable=this.heroData[a]&&this.heroData[a].unlockable||0,this.render()}}}customElements.define(OverwebsMainPage.is,OverwebsMainPage);

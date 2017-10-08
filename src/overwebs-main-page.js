@@ -13,7 +13,7 @@ class OverwebsMainPage extends GluonElement {
         display: block;
         position: relative;
         overflow: auto;
-        width: 100vw;
+        width: 100%;
         min-height: 100vh;
         padding-top: 12vw;
       }
@@ -132,10 +132,10 @@ class OverwebsMainPage extends GluonElement {
       _heroChanged();
     });
     this.$.playerData.addEventListener('player-changed', () => {
-      console.log('EVENT!');
       this.$.playerWidget.player = this.$.playerData.player;
     });
   }
+
   static get observers() {
     return ['_heroChanged(heroData, playerData, backgroundSelection)'];
   }
