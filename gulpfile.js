@@ -1,18 +1,13 @@
 'use strict';
 
-// Include Gulp & tools we'll use
-var gulp = require('gulp');
-var babel = require('gulp-babel');
-var minifyCss = require('gulp-minify-css');
-var autoprefixer = require('gulp-autoprefixer');
-var browserSync = require('browser-sync');
-var path = require('path');
-var historyApiFallback = require('connect-history-api-fallback');
-
-var SOURCE = 'src';
-var source = function(...subpaths) {
-  return subpaths.length == 0 ? SOURCE : path.join(SOURCE, ...subpaths);
-};
+const gulp = require('gulp');
+const path = require('path');
+const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify-es').default;
+// const minifyCss = require('gulp-minify-css');
+// const autoprefixer = require('gulp-autoprefixer');
+const browserSync = require('browser-sync');
+const historyApiFallback = require('connect-history-api-fallback');
 
 // Watch files for changes & reload
 gulp.task('serve', function() {
@@ -45,7 +40,9 @@ gulp.task('serve', function() {
 // Build production files, the default task
 gulp.task('default', function(cb) {
   gulp
-    .src(source('*.js'))
-    .pipe(babel({ presets: ['minify'] }))
+    .src('src/overwebs-main-page.js')
+    .pipe(sourcemaps.init())
+    .pipe(uglify({ toplevel: true, mangle: true, compress: { passes: 2 } }))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('.'));
 });

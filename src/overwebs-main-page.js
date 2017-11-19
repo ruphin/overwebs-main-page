@@ -4,84 +4,96 @@ import '../overwebs-player-data/overwebs-player-data.js';
 import '../overwebs-main-menu/overwebs-main-menu.js';
 import '../overwebs-fonts/overwebs-fonts.js';
 
-class OverwebsMainPage extends GluonElement {
+export class OverwebsMainPage extends GluonElement {
   get template() {
-    // TODO: Migrate to --overwebs-window-size
     return html`
     <style>
       :host {
         display: block;
         position: relative;
-        overflow: auto;
         width: 100%;
-        min-height: 100vh;
-        padding-top: 12vw;
+        min-height: 100%;
+        box-sizing: border-box;
+        padding-top: calc(270 / 2560 * var(--overwebs-window-size, 1920px));
+      }
+
+      overwebs-player-widget {
+        position: absolute;
+        top: calc(40 / 2560 * var(--overwebs-window-size, 1920px));
+        right: calc(68 / 2560 * var(--overwebs-window-size, 1920px));
       }
 
       .searching-spinner {
-        margin-left: calc(40 / 25.6 * 1vw);
-        height: calc(80 / 25.6 * 1vw);
-        width: calc(80 / 25.6 * 1vw)
+        margin-left: calc(40 / 2560 * var(--overwebs-window-size, 1920px));
+        height: calc(80 / 2560 * var(--overwebs-window-size, 1920px));
+        width: calc(80 / 2560 * var(--overwebs-window-size, 1920px));
       }
 
       .hero {
         opacity: .9;
         position: absolute;
-        right: 2vw;
-        top: calc(905 / 25.6 * 1vw);
+        right: calc(5 / 2560 * var(--overwebs-window-size, 1920px));
+        top: calc(760 / 2560 * var(--overwebs-window-size, 1920px));
         text-align: right;
-        z-index: 0
+        z-index: 3;
+      }
+
+      @media (max-width: 660px) {
+        .hero {
+          top: calc(960 / 2560 * var(--overwebs-window-size, 1920px));
+        }
       }
 
       .hero .name,
       .hero .nameShadow,
       .hero .nameShadow2 {
-        padding-right: 3vw;
+        padding-right: calc(76 / 2560 * var(--overwebs-window-size, 1920px));
         font-family: overwebs-big-noodle;
         line-height: 1;
-        font-size: calc(114 / 25.6 * 1vw);
-        color: transparent
+        font-size: calc(114 / 2560 * var(--overwebs-window-size, 1920px));
+        color: transparent;
       }
 
       .hero .nameShadow,
       .hero .nameShadow2 {
         color: #fff;
         position: absolute;
-        right: 0
+        right: 0;
+        top: 0;
       }
 
       .hero .name {
         background: linear-gradient(#fff 0, #fff 50%, #fff 50%, #BDBFC0);
-        -webkit-background-clip: text
+        -webkit-background-clip: text;
       }
 
       .hero .nameShadow {
         z-index: -1;
-        -webkit-text-stroke: .1275vw rgba(0, 0, 0, .15)
+        -webkit-text-stroke: calc(3 / 2560 * var(--overwebs-window-size, 1920px)) rgba(0, 0, 0, .15);
       }
 
       .hero .nameShadow2 {
         z-index: -2;
         background: linear-gradient(transparent, transparent 10%, rgba(219, 155, 143, .85) 16%, rgba(0, 0, 0, .15));
         -webkit-background-clip: text;
-        -webkit-text-stroke: .15vw transparent
+        -webkit-text-stroke: calc(4 / 2560 * var(--overwebs-window-size, 1920px)) transparent;
       }
 
       .hero .unlocks,
       .hero .unlocksShadow {
         font-family: overwebs-futura;
-        font-size: calc(36 / 25.6 * 1vw);
+        font-size: calc(36 / 2560 * var(--overwebs-window-size, 1920px));
         text-transform: uppercase;
-        padding-right: calc(70 / 25.6 * 1vw)
+        padding-right: calc(70 / 2560 * var(--overwebs-window-size, 1920px));
       }
 
       .hero .unlocks {
         color: rgba(255, 255, 255, .8);
-        margin-top: calc(2 / 25.6 * 1vw)
+        margin-top: calc(2 / 2560 * var(--overwebs-window-size, 1920px));
       }
 
       .hero .unlocks .unlocked {
-        color: #fff
+        color: #fff;
       }
 
       .hero .unlocksShadow {
@@ -90,7 +102,7 @@ class OverwebsMainPage extends GluonElement {
         right: 0;
         bottom: 0;
         z-index: -1;
-        -webkit-text-stroke: .1775vw rgba(0, 0, 0, .15)
+        -webkit-text-stroke: calc(4.5 / 2560 * var(--overwebs-window-size, 1920px)) rgba(0, 0, 0, .15);
       }
     </style>
     <overwebs-hero-data id="heroData"></overwebs-hero-data>
@@ -109,9 +121,9 @@ class OverwebsMainPage extends GluonElement {
       <a href="/exit">Exit Game</a>
     </overwebs-main-menu>
     <div class="hero">
+      <div class="name">${this._hero}</div>
       <div class="nameShadow">${this._hero}</div>
       <div class="nameShadow2">${this._hero}</div>
-      <div class="name">${this._hero}</div>
       <div class="unlocks"><span class="unlocked">${this._unlocked}</span>/${this._unlockable} unlocks</div>
       <div class="unlocksShadow">${this._unlocked}/${this._unlockable} unlocks</div>
     </div>
@@ -129,15 +141,22 @@ class OverwebsMainPage extends GluonElement {
     super.connectedCallback();
     this.$.heroData.addEventListener('data-changed', () => {
       this.heroData = this.$.heroData.data;
-      _heroChanged();
+      this._heroChanged();
     });
     this.$.playerData.addEventListener('player-changed', () => {
       this.$.playerWidget.player = this.$.playerData.player;
+      this.playerData = this.$.playerData.player;
+      this._heroChanged();
     });
   }
 
-  static get observers() {
-    return ['_heroChanged(heroData, playerData, backgroundSelection)'];
+  set backgroundSelection(backgroundSelection) {
+    this._backgroundSelection = backgroundSelection;
+    this._heroChanged();
+  }
+
+  get backgroundSelection() {
+    return this._backgroundSelection;
   }
 
   _heroChanged() {

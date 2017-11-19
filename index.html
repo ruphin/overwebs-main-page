@@ -8,14 +8,17 @@
 
 
 <style>
+  html,
+  body {
+    height: 100%;
+  }
+
   body {
     margin: 0;
-    height: 100vh;
-    overflow: hidden;
+    background: #000;
   }
 
   * {
-    cursor: url(/images/overwatch.cur), auto;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -24,8 +27,8 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
 
-   :root {
-    --overwebs-window-size: 100vw;
+  :root {
+    --overwebs-window-size: 1920px;
   }
 </style>
 
@@ -34,19 +37,34 @@
 <!-- endbuild -->
 
 <overwebs-player-data id="playerData"></overwebs-player-data>
-<overwebs-main-page></overwebs-main-page>
+<overwebs-main-page id="mainPage"></overwebs-main-page>
 
 
 <script>
   const playerStub = {
     name: 'Ruphin',
-    level: 142,
-    avatar: '0x02500000000008E8'
+    level: 942,
+    avatar: '0x02500000000008E8',
+    unlocks: {
+      widowmaker: 25
+    }
+  };
+
+  const heroStub = {
+    widowmaker: {
+      id: 'widowmaker',
+      name: 'Widowmaker',
+      unlockable: 72,
+      color: '#9E6AA7',
+      background: true,
+    }
   };
 
   window.customElements.whenDefined("overwebs-player-data").then(() => {
+    document.getElementById('mainPage').backgroundSelection = 'volskaya/widowmaker/';
+    document.getElementById('mainPage').heroData = heroStub;
     document.getElementById('playerData').player = playerStub;
-  })
+  });
 
   // This would be how to configure the asset path for modules.
   window.modulesAssetPath = function (module) {
